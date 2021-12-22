@@ -1,0 +1,53 @@
+#!hotpile.py
+%% NAME Universal Turing Machine
+%% START 9
+%% ACCEPT 1
+%% REJECT 0
+%% TAPE 1 2 3 4
+%% SYMBOL 0 1 : # _
+
+%% USE functions.tbl
+
+9 moveHeadEnd [1;10;]
+10 copyToSymbolLeft [1,2;20;sym=#;]
+20 rewind [1;30;]
+30 copyToSymbolRight [1,3;40;sym=#;]
+40 moveHead [1;50;dir=>;]
+50 moveHead [1;60;dir=>;]
+60 copyToSymbolRight [1,4;70;sym=#;]
+70 rewind [1;80;]
+80 rewind [2;90;]
+90 rewind [3;100;]
+100 rewind [4;110;]
+110 compareTilSymbol [3,4;1,120;term1=_,term2=_;]
+120 rewind [1;150;]
+150 rewind [4;160;]
+160 moveHeadTo [1;170;dir=>,symbol=#;]
+170 moveHead [1;180;dir=>;]
+180 moveHeadTo [1;190;dir=>,symbol=#;]
+190 moveHead [1;200;dir=>;]
+200 compareConstant [1;0,210;constant=#;]
+210 compareTilSymbol [3,1;240,220;term1=_,term2=:;] 
+220 moveHeadTo [1;230;dir=>,symbol=#;]
+230 rewind [3;190;]
+240 rewind [3;250;]
+250 moveHead [1;251;dir=>;]
+251 moveHead [1;260;dir=>;]
+260 compareCurrent [1,2;280,270;]
+270 moveHeadTo [1;190;dir=>,symbol=#;]
+280 rewind [3;290;]
+290 erase [3;300;]
+300 moveHead [1;310;dir=>;]
+310 moveHead [1;320;dir=>;]
+320 copyToSymbolRight [1,3;330;sym=:;]
+330 moveHead [1;340;dir=>;]
+340 moveHead [1;350;dir=>;]
+350 copyToSymbolRight [1,2;360;sym=:;]
+360 moveHead [1;370;dir=>;]
+370 moveHead [1;380;dir=>;]
+380 compareConstant [1;390,420;constant=0;]
+390 moveHead [1;391;dir=>;]
+391 compareConstant [1;400,410;constant=0;]
+400 moveHead [2;420;dir=<;]
+410 moveHead [2;420;dir=>;]
+420 rewind [3;110;]

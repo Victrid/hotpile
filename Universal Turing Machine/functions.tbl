@@ -1,0 +1,104 @@
+define moveHeadTo [
+tape t;
+pseudo dir, symbol;
+in_state s0;
+out_state s1;
+] {
+s0, [${symbol}], s1, %{0}, -;
+s0, [^${symbol}], s0, %{0}, ${dir};
+}
+
+define moveHead [
+tape t;
+pseudo dir;
+in_state s0;
+out_state s1;
+]{
+s0, [%{any}], s1, %{0}, ${dir};
+}
+
+define rewind [
+tape t;
+in_state s0;
+out_state s1;
+]{
+s0, [^_], s0, %{0}, <;
+s0, [_], s1, %{0}, >;
+}
+
+define moveHeadEnd [
+tape t;
+in_state s0;
+out_state s1;
+]{
+s0, [^_], s0, %{0}, >;
+s0, [_], s1, %{0}, <;
+}
+
+define copyToSymbolRight [
+tape src, dest;
+pseudo sym;
+in_state s0;
+out_state s1;
+]{
+s0, [^${sym}], [%{any}], s0, %{0}, %{0}, >, >;
+s0, [${sym}], [%{any}], s1, %{0}, %{1}, < , <;
+}
+
+define copyToSymbolLeft [
+tape src, dest;
+pseudo sym;
+in_state s0;
+out_state s1;
+]{
+s0, [^${sym}], [%{any}], s0, %{0}, %{0}, <, <;
+s0, [${sym}], [%{any}], s1, %{0}, %{1}, >, >;
+}
+
+define compareTilSymbol [
+tape src, dest;
+pseudo term1, term2;
+in_state s0;
+out_state strue, sfalse;
+]{
+
+s0, [%{any}], [%{0}], s1, %{0}, %{1}, >, >;
+s0, [%{any}], [^%{0}], sfalse, %{0}, %{1}, -, -;
+
+s1, [${term1}], [${term2}], strue, %{0}, %{1}, <, <;
+s1, [${term1}], [^${term2}], sfalse, %{0}, %{1}, <, <;
+s1, [^${term1}], [${term2}], sfalse, %{0}, %{1}, <, <;
+s1, [^${term1}], [^${term2}], s2, %{0}, %{1}, -,-;
+s2, [^${term1}], [%{0}], s1, %{0}, %{1}, >, >;
+s2, [^${term1}], [^%{0}], sfalse, %{0}, %{1}, <, <;
+}
+
+define compareCurrent [
+tape src, dest;
+in_state s0;
+out_state strue, sfalse;
+]
+{
+s0, [%{any}], [%{0}], strue, %{0}, %{1}, -, -;
+s0, [%{any}], [^%{0}], sfalse, %{0}, %{1}, -, -;
+}
+
+define compareConstant [
+tape src;
+in_state s0;
+pseudo constant;
+out_state strue, sfalse;
+]
+{
+s0, [${constant}], strue, %{0}, -;
+s0, [^${constant}], sfalse, %{0}, -;
+}
+
+define erase [
+tape src;
+in_state s0;
+out_state s1;
+]{
+s0, [_], s1, %{0}, -;
+s0, [^_], s0, _, >;
+}
